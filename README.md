@@ -1,1 +1,2 @@
-# Install Mocha- npm install -g mocha
+# Install Mocha
+npm install -g mocha
