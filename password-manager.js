@@ -20,8 +20,39 @@ class Keychain {
   }
 
 
+    // Helper method to derive encryption and HMAC keys from master key
+    async #deriveKeys(masterKey) {
+      const hmacKey = await subtle.sign(
+        "HMAC",
+        masterKey,
+        stringToBuffer("hmac-key")
+      );
+      
+      const encKey = await subtle.sign(
+        "HMAC",
+        masterKey,
+        stringToBuffer("enc-key")
+      );
   
-// Write code here
+      const hmacImportedKey = await subtle.importKey(
+        "raw",
+        hmacKey,
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["sign", "verify"]
+      );
+  
+      const encImportedKey = await subtle.importKey(
+        "raw",
+        encKey,
+        "AES-GCM",
+        false,
+        ["encrypt", "decrypt"]
+      );
+  
+      return { hmacImportedKey, encImportedKey };
+    }
+
 
 
 };
