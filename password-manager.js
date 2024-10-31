@@ -53,6 +53,38 @@ class Keychain {
       return { hmacImportedKey, encImportedKey };
     }
 
+  static async init(password) {
+    if (!password || typeof password !== 'string') {
+      throw new Error("Invalid password");
+    }
+
+    const salt = getRandomBytes(16);
+    
+    const pwKey = await subtle.importKey(
+      "raw",
+      stringToBuffer(password),
+      "PBKDF2",
+      false,
+      ["deriveKey"]
+    );
+
+    const masterKey = await subtle.deriveKey(
+      {
+        name: "PBKDF2",
+        salt: salt,
+        iterations: PBKDF2_ITERATIONS,
+        hash: "SHA-256"
+      },
+      pwKey,
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"]
+    );
+
+    return new Keychain(masterKey, salt);
+  }
+
+  
 
 
 };
