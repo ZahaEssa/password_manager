@@ -185,11 +185,19 @@ class Keychain {
     }
   }
 
-
-
-
-
+  async dump() {
+    const repr = JSON.stringify({
+      salt: encodeBuffer(this.data.salt),
+      kvs: this.data.kvs
+    });
   
+    const checksum = await subtle.digest(
+      "SHA-256",
+      stringToBuffer(repr)
+    );
+  
+    return [repr, encodeBuffer(checksum)];
+  }
 
 };
 
