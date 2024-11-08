@@ -199,6 +199,37 @@ class Keychain {
     return [repr, encodeBuffer(checksum)];
   }
 
+  async get(name) {
+    const { hmacImportedKey, encImportedKey } = await this.#deriveKeys(this.secrets.masterKey);
+    
+    const nameHmac = await subtle.sign(
+      "HMAC",
+      hmacImportedKey,
+      stringToBuffer(name)
+    );
+    const nameKey = encodeBuffer(nameHmac);
+  
+    if (!this.data.kvs[nameKey]) {
+      return null;
+    }
+  
+    const encrypted = decodeBuffer(this.data.kvs[nameKey]);
+    const iv = encrypted.slice(0, 12);
+    const ciphertext = encrypted.slice(12);
+  
+    try {
+      const decrypted = await subtle.decrypt(
+        { name: "AES-GCM", iv: iv },
+        encImportedKey,
+        ciphertext
+      );
+  
+      return bufferToString(decrypted).trim();
+    } catch (e) {
+      throw new Error("Decryption failed - possible tampering");
+    }
+  }
+
 };
 
 module.exports = { Keychain }
