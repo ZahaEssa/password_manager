@@ -230,6 +230,32 @@ class Keychain {
     }
   }
 
+  async set(name, value) {
+    const { hmacImportedKey, encImportedKey } = await this.#deriveKeys(this.secrets.masterKey);
+    
+    const nameHmac = await subtle.sign(
+      "HMAC",
+      hmacImportedKey,
+      stringToBuffer(name)
+    );
+    const nameKey = encodeBuffer(nameHmac);
+
+    const paddedValue = value.padEnd(MAX_PASSWORD_LENGTH, ' ');
+    
+    const iv = getRandomBytes(12);
+    const encrypted = await subtle.encrypt(
+      { name: "AES-GCM", iv: iv },
+      encImportedKey,
+      stringToBuffer(paddedValue)
+    );
+
+    const toStore = new Uint8Array(iv.length + encrypted.byteLength);
+    toStore.set(new Uint8Array(iv), 0);
+    toStore.set(new Uint8Array(encrypted), iv.length);
+    
+    this.data.kvs[nameKey] = encodeBuffer(toStore);
+  }
+
 };
 
 module.exports = { Keychain }
