@@ -256,6 +256,23 @@ class Keychain {
     this.data.kvs[nameKey] = encodeBuffer(toStore);
   }
 
+  async remove(name) {
+    const { hmacImportedKey } = await this.#deriveKeys(this.secrets.masterKey);
+    
+    const nameHmac = await subtle.sign(
+      "HMAC",
+      hmacImportedKey,
+      stringToBuffer(name)
+    );
+    const nameKey = encodeBuffer(nameHmac);
+
+    if (this.data.kvs[nameKey]) {
+      delete this.data.kvs[nameKey];
+      return true;
+    }
+    return false;
+  }
+
 };
 
 module.exports = { Keychain }
