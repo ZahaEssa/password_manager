@@ -40,10 +40,9 @@ A secure password manager using JavaScript, cryptographic primitives, and the Su
 
 ## Testing
 
+npm install -g mocha
 
-npm testnpm install -g mocha
-
-npm testnpm test
+testnpm test
 
 
 
