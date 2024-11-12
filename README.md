@@ -42,7 +42,7 @@ A secure password manager using JavaScript, cryptographic primitives, and the Su
 
 npm install -g mocha
 
-testnpm test
+npm test
 
 
 
