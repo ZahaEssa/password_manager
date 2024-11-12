@@ -13,7 +13,7 @@ A secure password manager using JavaScript, cryptographic primitives, and the Su
 ## Installation
 
 1. **Install Node.js**: [Download Node.js](https://nodejs.org/en/).
-2. **Setup**: Clone the repository and run `npm install`.
+2. **Setup**: Clone the repository.
 
 ## Usage
 
@@ -40,10 +40,9 @@ A secure password manager using JavaScript, cryptographic primitives, and the Su
 
 ## Testing
 
-```bash
+
 npm testnpm install -g mocha
 
-```bash
 npm testnpm test
 
 
