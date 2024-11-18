@@ -38,6 +38,9 @@ A secure password manager using JavaScript, cryptographic primitives, and the Su
 3. **Rollback Attack Mitigation**: SHA-256 checksum checks for tampering.
 4. **Efficient Lookup**: Uses deterministic HMAC for consistent lookups.
 
+## GUI packages to install
+npm install express mysql2 crypto
+
 ## Testing
 
 npm install -g mocha
