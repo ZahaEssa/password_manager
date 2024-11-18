@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Form</title>
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e0e7ff, #f8fafc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    /* Form Container */
+    #login-form {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4f46e5;
+      margin-bottom: 25px;
+    }
+
+    /* Form Fields */
+    label {
+      display: block;
+      font-size: 14px;
+      color: #4a5568;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #2d3748;
+      margin-bottom: 20px;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #4f46e5;
+      outline: none;
+    }
+
+    /* Submit Button */
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4f46e5;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #3b3ab2;
+      transform: scale(1.02);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 480px) {
+      #login-form {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      button {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+ 
+  <form id="login-form">
+    <h1>Register</h1>
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    document.getElementById("login-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Sending data to the backend
+      const response = await fetch('/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert("User registered successfully!");
+      } else {
+        alert("Failed to register user");
+      }
+    });
+  </script>
+</body>
+</html>
